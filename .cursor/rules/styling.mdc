@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+
+- *.tsx
+- always use nativewind tailwinds style for styling here
