@@ -1,12 +1,68 @@
-import { View, Text } from 'react-native';
+import React from 'react';
+import { View, Text, ImageBackground, ScrollView, TouchableOpacity, Image } from 'react-native';
 import ScreenLayout from '../../components/ScreenLayout';
+// import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; // Keep this if you use icons
+
+const transactions = [
+    { id: '1', type: 'received', description: 'Sold Data to Tesla Inc', amount: '+4000 PAX', date: '25-05-2025 13:30', icon: 'gift-outline' },
+    { id: '2', type: 'received', description: 'Sold Data to Forc Corp', amount: '+3000 PAX', date: '25-05-2025 13:30', icon: 'gift-outline' },
+    { id: '3', type: 'sent', description: 'Cash out', amount: '-30000 PAX', date: '25-05-2025 13:30', icon: 'arrow-up-circle-outline' },
+];
 
 export default function PortfolioScreen() {
     return (
-        <ScreenLayout>
-            <View className="flex-1 items-center justify-center">
-                <Text className="text-white text-xl font-gilroy-bold">Portfolio Screen</Text>
-            </View>
+        <ScreenLayout title="Portfolio">
+            <ScrollView className="flex-1 px-2 pt-4 font-gilroy-medium tracking-tight">
+
+                <View className="px-3 pt-3 bg-[#141414] rounded-3xl">
+                    <Text className="text-gray-200 text-base mb-6 mt-1 ml-1 font-gilroy-medium tracking-tight">Your wallet</Text>
+                    <ImageBackground
+                        source={require('../../assets/bg3.png')}
+                        className="rounded-3xl overflow-hidden mb-3 px-5 pb-3"
+                        resizeMode="cover"
+                    >
+                        <Image source={require('../../assets/logo.png')} className="w-8 h-8 mt-6 opacity-40" resizeMode="contain" />
+
+                        <View className="pt-10">
+                            <Text className="text-white text-4xl mb-1 font-gilroy-medium tracking-tight">32,432 PAX</Text>
+                            <Text className="text-white text-xs font-gilroy-medium tracking-tight opacity-80">total balance</Text>
+                        </View>
+                    </ImageBackground>
+                </View>
+
+                <Text className="text-white text-lg mb-3 font-gilroy-bold tracking-tight">Transactions</Text>
+
+                <View className="mb-4">
+                    {transactions.map((item) => (
+                        <View key={item.id} className="flex-row items-center justify-between bg-gray-800/50 p-4 rounded-lg mb-3">
+                            <View className="flex-row items-center flex-1 mr-2">
+                                <View className="w-8 h-8 bg-gray-700 rounded-full mr-3 items-center justify-center">
+                                    {/* Replace with actual Icon component if needed */}
+                                    {/* <Icon name={item.icon} size={20} color="#9CA3AF" /> */}
+                                    <Text className="text-gray-400 text-xs">Icon</Text>
+                                </View>
+                                <View className="flex-1">
+                                    <Text className="text-white text-sm font-gilroy-medium tracking-tight">{item.description}</Text>
+                                    <Text className="text-gray-400 text-xs font-gilroy-medium tracking-tight">{item.date}</Text>
+                                </View>
+                            </View>
+                            <View className="items-end">
+                                <Text className={`text-sm font-gilroy-bold tracking-tight ${item.type === 'received' ? 'text-green-400' : 'text-red-400'}`}>{item.amount}</Text>
+                                <Text className="text-gray-400 text-xs font-gilroy-medium tracking-tight">{item.type}</Text>
+                            </View>
+                        </View>
+                    ))}
+                </View>
+
+                <TouchableOpacity className="items-end mb-8">
+                    <Text className="text-gray-400 text-sm font-gilroy-medium tracking-tight underline">see all</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity className="bg-white py-4 rounded-lg items-center justify-center mb-6">
+                    <Text className="text-black text-base font-gilroy-bold tracking-tight">CASH OUT</Text>
+                </TouchableOpacity>
+
+            </ScrollView>
         </ScreenLayout>
     );
-} 
+}

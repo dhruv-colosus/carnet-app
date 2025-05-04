@@ -34,13 +34,12 @@ export default function ScreenLayout({ children, title, vehicleName = "Dhruv's T
                 <View className="flex-row justify-between items-center pt-6">
                     <View className="flex-row items-center">
                         {title && (
-                            <Text className="font-gilroy-medium text-white text-2xl ml-4">
+                            <Text className="font-gilroy-semibold text-white text-2xl ml-4">
                                 {title}
                             </Text>
                         )}
-                        <View className="h-6 w-[1px] bg-white/40 mx-4" />
                     </View>
-                    <View className="items-end mr-4">
+                    <View className="items-end mr-4 border-r-[1px] border-white pr-2">
                         <Text className="font-gilroy-medium text-white text-base">
                             {vehicleName}
                         </Text>
@@ -48,6 +47,7 @@ export default function ScreenLayout({ children, title, vehicleName = "Dhruv's T
                             {currentDate}
                         </Text>
                     </View>
+
                 </View>
                 {children}
             </SafeAreaView>

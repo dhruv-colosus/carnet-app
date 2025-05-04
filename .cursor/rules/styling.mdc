@@ -8,3 +8,4 @@ alwaysApply: true
 
 - *.tsx
 - always use nativewind tailwinds style for styling here
+- always use a girloy font type in nativewind font-gilroy-medium, font-gilroy-regular etc

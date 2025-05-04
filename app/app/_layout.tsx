@@ -4,6 +4,7 @@ import "../global.css"
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 // Prevent the splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
@@ -28,15 +29,19 @@ export default function RootLayout() {
     }
 
     return (
-        <View className="flex-1 bg-black">
-            <Stack screenOptions={{
-                headerShown: false,
-                contentStyle: { backgroundColor: 'transparent' }
-            }}>
-                <Stack.Screen name="index" />
-                <Stack.Screen name="(tabs)" />
-                <Stack.Screen name="+not-found" />
-            </Stack>
-        </View>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+
+            <View className="flex-1 bg-black">
+                <Stack screenOptions={{
+                    headerShown: false,
+                    contentStyle: { backgroundColor: 'transparent' }
+                }}>
+                    <Stack.Screen name="index" />
+                    <Stack.Screen name="(tabs)" />
+                    <Stack.Screen name="+not-found" />
+                </Stack>
+            </View>
+        </GestureHandlerRootView>
+
     );
 }

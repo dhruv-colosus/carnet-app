@@ -31,6 +31,7 @@ export default function TabLayout() {
             <View className="flex-1 mb-4">
                 <StatusBar barStyle="light-content" />
                 <Tabs
+                    initialRouteName="index"
                     screenOptions={{
                         tabBarActiveTintColor: '#ffffff',
                         tabBarInactiveTintColor: '#3A3D4A',
@@ -43,9 +44,10 @@ export default function TabLayout() {
                         },
                         tabBarBackground: () => TabBackground,
                         headerShown: false,
-                        tabBarLabelStyle: styles.tabLabel, // Apply the style here
+                        tabBarLabelStyle: styles.tabLabel,
                     }}
                 >
+
                     <Tabs.Screen
                         name="live"
                         options={{
@@ -54,12 +56,13 @@ export default function TabLayout() {
                         }}
                     />
                     <Tabs.Screen
-                        name="stats"
+                        name="index"
                         options={{
                             title: 'Stats',
                             tabBarIcon: ({ color }) => <ChartNoAxesColumn size={24} color={color} strokeWidth={3} />,
                         }}
                     />
+
                     <Tabs.Screen
                         name="shop"
                         options={{
