@@ -8,7 +8,7 @@ type ScreenLayoutProps = {
     vehicleName?: string;
 };
 
-export default function ScreenLayout({ children, title, vehicleName = "Dhruv's Tesla" }: ScreenLayoutProps) {
+export default function ScreenLayout({ children, title, vehicleName }: ScreenLayoutProps) {
     const [currentDate, setCurrentDate] = useState<string>("");
 
     useEffect(() => {
@@ -41,7 +41,7 @@ export default function ScreenLayout({ children, title, vehicleName = "Dhruv's T
                     </View>
                     <View className="items-end mr-4 border-r-[1px] border-white pr-2">
                         <Text className="font-gilroy-medium text-white text-base">
-                            {vehicleName}
+                            {vehicleName || "Dhruv's Tesla"}
                         </Text>
                         <Text className="font-gilroy-medium text-white text-sm">
                             {currentDate}
@@ -49,7 +49,9 @@ export default function ScreenLayout({ children, title, vehicleName = "Dhruv's T
                     </View>
 
                 </View>
-                {children}
+                <View className="flex-1">
+                    {children}
+                </View>
             </SafeAreaView>
         </ImageBackground>
     );

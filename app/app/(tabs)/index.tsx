@@ -61,8 +61,8 @@ const StatRow = ({ Icon, label, value, unit }: { Icon: React.ElementType, label:
 
 export default function StatsScreen() {
     return (
-        <ScreenLayout title="Statistics">
-            <ScrollView className="flex-1 " showsVerticalScrollIndicator={false}>
+        <ScreenLayout title="Statistics" vehicleName="Dhruv's Tesla">
+            <ScrollView className="flex-1 " showsVerticalScrollIndicator={false} >
 
                 <View className="px-4 pt-2 pb-4">
                     <Text className="text-white text-5xl tracking-tighter font-gilroy-medium mt-8 mb-5">
@@ -104,7 +104,7 @@ export default function StatsScreen() {
                 </View>
 
 
-            </ScrollView>
-        </ScreenLayout>
+            </ScrollView >
+        </ScreenLayout >
     );
 }

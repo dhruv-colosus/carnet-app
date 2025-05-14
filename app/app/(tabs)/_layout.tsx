@@ -24,7 +24,7 @@ export default function TabLayout() {
 
     return (
         <ImageBackground
-            source={require('../../assets/bg2.png')}
+            source={require('../../assets/trythisbg.png')}
             className="flex-1"
             resizeMode="cover"
         >
