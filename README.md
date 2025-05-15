@@ -1,6 +1,6 @@
-# FastAPI Backend
+# CARNET APP
+![betterferferf](https://github.com/user-attachments/assets/eafb40fa-78a4-4113-afdd-92cf57e465aa)
 
-A WebSocket-based backend server that streams mock data to connected clients.
 
 ## Setup
 
