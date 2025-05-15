@@ -17,19 +17,27 @@ def hello():
     return {"message": "Hello, World!"}
 
 @app.websocket("/live")
-async def live_endpoint(websocket: WebSocket, userid: str = Query(...)):
-   
+async def live_endpoint(websocket: WebSocket):
     await websocket.accept()
-    try:
-        # Load the mock data
-        with open("mock_data.json", "r") as f:
-            data = json.load(f)
+    user_id = websocket.query_params.get("userid", "unknown")
+    print(f"[WS] Connected: {user_id}")
 
+    try:
+        with open("mock_data.json") as f:
+            data = json.load(f)
         for entry in data:
-            payload = {"userid": userid, **entry}
-            await websocket.send_json(payload)
+            await websocket.send_json({"userid": user_id, **entry})
             await asyncio.sleep(1)
     except WebSocketDisconnect:
-        print(f"Client {userid} disconnected")
+        print(f"[WS] {user_id} disconnected")
     except Exception as e:
-        print(f"Error in streaming data: {e}")
+        print(f"[WS ERROR] {e}")
+
+@app.websocket("/hi")
+async def ws_root(ws: WebSocket):
+    await ws.accept()
+    print("WS client connected")
+    while True:
+        msg = await ws.receive_text()
+        print("Received:", msg)
+        await ws.send_text(f"You said: {msg}")

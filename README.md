@@ -40,7 +40,7 @@ A WebSocket-based backend server that streams mock data to connected clients.
 
 Start the FastAPI server with:
 ```
-uvicorn srv.main:app --reload
+uvicorn main:app --reload
 ```
 
 The server will be available at:
