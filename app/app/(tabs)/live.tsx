@@ -24,38 +24,10 @@ export default function LiveScreen() {
             setIsLoading(false);
         }, 200);
 
-        async function fetchData() {
-            try {
-                const res = await fetch('http://192.168.1.10:8000/', {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                });
 
-                if (!res.ok) {
-                    throw new Error(`HTTP error! Status: ${res.status}`);
-                }
 
-                const text = await res.text();
-                console.log('Raw response:', text);
-
-                try {
-                    const data = JSON.parse(text);
-                    console.log('Response data:', data);
-                    // Update liveData with the fetched data if needed
-                    // setLiveData({...});
-                } catch (parseError) {
-                    console.log('Response is not JSON:', text);
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                setConnected(false);
-            }
-        }
-        fetchData();
-        const ws = new WebSocket(`ws://192.168.1.10:8000/live?userid=${userId}`);
+        const ws = new WebSocket(`${process.env.EXPO_PUBLIC_API_URL_WS}/live?userid=${userId}`);
+        console.log(`${process.env.EXPO_PUBLIC_API_URL_WS}/live?userid=${userId}`);
 
         ws.onopen = () => {
             console.log('WebSocket connected');

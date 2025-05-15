@@ -3,6 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import ScreenLayout from '../../components/ScreenLayout';
 import { ShieldCheck, Info, CheckSquare, Square } from 'phosphor-react-native';
+import { toast } from 'sonner-native';
 
 interface DataItem {
     name: string;
@@ -149,6 +150,9 @@ export default function BuyerDetailScreen() {
 
     // Handle sell data action
     const handleSellData = () => {
+        toast.success(`Selling data for total of ${totalDCG} DCG`, {
+            style: { backgroundColor: '#050026', opacity: 0.95 },
+        });
         console.log(`Selling data for total of ${totalDCG} DCG`);
     };
 

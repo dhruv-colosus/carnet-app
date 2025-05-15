@@ -1,10 +1,13 @@
-import json
-import asyncio
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+from routes import live, hi, users
+from db import engine, Base
 
+app = FastAPI()
+Base.metadata.create_all(bind=engine)
+
+# --- CORS middleware (unchanged) ---
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -12,32 +15,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# --- include your routers ---
+app.include_router(live.router)
+app.include_router(hi.router)
+app.include_router(users.router)
+# app.include_router(users.router)
+
+
 @app.get("/")
 def hello():
     return {"message": "Hello, World!"}
-
-@app.websocket("/live")
-async def live_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    user_id = websocket.query_params.get("userid", "unknown")
-    print(f"[WS] Connected: {user_id}")
-
-    try:
-        with open("mock_data.json") as f:
-            data = json.load(f)
-        for entry in data:
-            await websocket.send_json({"userid": user_id, **entry})
-            await asyncio.sleep(1)
-    except WebSocketDisconnect:
-        print(f"[WS] {user_id} disconnected")
-    except Exception as e:
-        print(f"[WS ERROR] {e}")
-
-@app.websocket("/hi")
-async def ws_root(ws: WebSocket):
-    await ws.accept()
-    print("WS client connected")
-    while True:
-        msg = await ws.receive_text()
-        print("Received:", msg)
-        await ws.send_text(f"You said: {msg}")

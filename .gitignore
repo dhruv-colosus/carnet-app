@@ -49,3 +49,5 @@ Thumbs.db
 # Project specific
 mock_data.json
 logs/ 
+
+*.db

@@ -3,6 +3,7 @@
     "name": "carnet",
     "slug": "carnet",
     "version": "1.0.0",
+    "scheme": "carnet",
     "web": {
       "favicon": "./assets/favicon.png"
     },
