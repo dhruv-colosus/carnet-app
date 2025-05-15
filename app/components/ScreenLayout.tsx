@@ -41,7 +41,7 @@ export default function ScreenLayout({ children, title, vehicleName }: ScreenLay
                     </View>
                     <View className="items-end mr-4 border-r-[1px] border-white pr-2">
                         <Text className="font-gilroy-medium text-white text-base">
-                            {vehicleName || "Dhruv's Tesla"}
+                            {vehicleName ? vehicleName : "Dhruv's Tesla"}
                         </Text>
                         <Text className="font-gilroy-medium text-white text-sm">
                             {currentDate}

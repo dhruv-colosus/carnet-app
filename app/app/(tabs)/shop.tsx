@@ -60,20 +60,22 @@ const BuyerCard = ({ item, onPress }: { item: any, onPress: () => void }) => (
         onPress={onPress}
         className="bg-gray-800/30 rounded-xl p-3 mb-3 flex-1 mx-1"
     >
-        <View className="items-center mb-2">
-            <View className="w-12 h-12 bg-gray-400 rounded-full items-center justify-center mb-2">
+        <View className="flex-row justify-between items-center mb-2">
+            <View className="w-12 h-12 bg-white/10 rounded-full items-center justify-center mb-2">
                 <Image source={item.icon} className="w-7 h-7 opacity-60" resizeMode="contain" />
             </View>
-            <Text className="text-white text-base font-gilroy-medium tracking-tight text-center">{item.name}</Text>
+            <View className='flex-col items-end'>
+                <Text className="text-white text-base font-gilroy-medium tracking-tight text-center">{item.name}</Text>
+                <Text className="text-green-100 text-xl font-gilroy-bold tracking-tight">{item.amount}</Text>
+            </View>
         </View>
 
-        <View className="bg-gray-700/40 rounded-full px-3 py-1 items-center mb-2 mx-auto">
-            <Text className="text-green-400 text-sm font-gilroy-bold tracking-tight">{item.amount}</Text>
-        </View>
+
 
         <Text className="text-gray-300 text-xs font-gilroy-medium tracking-tight text-center mb-3" numberOfLines={2}>
             {item.description}
         </Text>
+
 
         <View className="flex-row justify-between">
             <View className="flex-row items-center">

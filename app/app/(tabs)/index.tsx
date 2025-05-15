@@ -8,7 +8,7 @@ const statsData = {
     date: "May 2",
     totalMiles: "7,950",
     averageSpeed: "23.5",
-    totalAlerts: "55",
+    totalAlerts: "5",
 };
 
 const { width } = Dimensions.get('window');

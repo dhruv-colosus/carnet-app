@@ -1,83 +1,127 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import ScreenLayout from '../../components/ScreenLayout';
-import { ShieldCheck, TrendUp, Info } from 'phosphor-react-native';
+import { ShieldCheck, Info, CheckSquare, Square } from 'phosphor-react-native';
 
-// Mock data for potential buyers (same as in shop.tsx)
-const buyerData = [
+interface DataItem {
+    name: string;
+    value: number;
+}
+
+interface BuyerDataItem {
+    id: string;
+    name: string;
+    description: string;
+    longDescription: string;
+    trustScore: string;
+    icon: any;
+    dataItems: DataItem[];
+}
+
+interface SelectedItems {
+    [key: number]: boolean;
+}
+
+interface DataCheckboxItemProps {
+    item: DataItem;
+    isSelected: boolean;
+    onToggle: () => void;
+}
+
+const buyerData: BuyerDataItem[] = [
     {
         id: '1',
         name: 'Tesla Inc',
         description: 'Vehicle performance & driver behavior',
         longDescription: 'Tesla is interested in analyzing vehicle performance metrics and driver behavior patterns to improve their autonomous driving systems. Your data will help train AI models for safer self-driving technology.',
-        amount: '1000 DCG',
         trustScore: '98%',
-        dataPoints: '158',
         icon: require('../../assets/logo.png'),
-        dataCategories: ['Location Data', 'Speed Metrics', 'Acceleration Patterns', 'Braking Behavior']
+        dataItems: [
+            { name: 'Location Data', value: 250 },
+            { name: 'Speed Metrics', value: 300 },
+            { name: 'Acceleration Patterns', value: 250 },
+            { name: 'Braking Behavior', value: 200 }
+        ]
     },
     {
         id: '2',
         name: 'Ford Corp',
         description: 'Engine performance & maintenance data',
         longDescription: 'Ford is collecting engine performance and maintenance data to improve vehicle reliability and reduce warranty costs. Your data helps identify early signs of component failure and optimize maintenance schedules.',
-        amount: '850 DCG',
         trustScore: '95%',
-        dataPoints: '120',
         icon: require('../../assets/logo.png'),
-        dataCategories: ['Engine Diagnostics', 'Oil Performance', 'Component Wear', 'Maintenance Intervals']
+        dataItems: [
+            { name: 'Engine Diagnostics', value: 200 },
+            { name: 'Oil Performance', value: 200 },
+            { name: 'Component Wear', value: 250 },
+            { name: 'Maintenance Intervals', value: 200 }
+        ]
     },
     {
         id: '3',
         name: 'Waymo AI',
         description: 'Location & environmental data',
         longDescription: 'Waymo utilizes location and environmental data to enhance mapping systems and understand how different weather conditions affect autonomous vehicle performance. Your data improves navigation in diverse environments.',
-        amount: '1200 DCG',
         trustScore: '92%',
-        dataPoints: '210',
         icon: require('../../assets/logo.png'),
-        dataCategories: ['GPS Coordinates', 'Weather Conditions', 'Road Surface Quality', 'Traffic Patterns']
+        dataItems: [
+            { name: 'GPS Coordinates', value: 350 },
+            { name: 'Weather Conditions', value: 250 },
+            { name: 'Road Surface Quality', value: 300 },
+            { name: 'Traffic Patterns', value: 300 }
+        ]
     },
     {
         id: '4',
         name: 'Toyota Motors',
         description: 'Fuel usage & emission patterns',
         longDescription: 'Toyota is analyzing fuel consumption and emissions data to develop more efficient and environmentally friendly vehicles. Your data contributes to reducing carbon footprints and optimizing fuel economy.',
-        amount: '750 DCG',
         trustScore: '97%',
-        dataPoints: '96',
         icon: require('../../assets/logo.png'),
-        dataCategories: ['Fuel Consumption', 'Emission Levels', 'Driving Habits', 'Idle Time']
+        dataItems: [
+            { name: 'Fuel Consumption', value: 200 },
+            { name: 'Emission Levels', value: 150 },
+            { name: 'Driving Habits', value: 200 },
+            { name: 'Idle Time', value: 200 }
+        ]
     },
     {
         id: '5',
         name: 'Uber',
         description: 'Route optimization & traffic patterns',
         longDescription: 'Uber is collecting route and traffic data to optimize their navigation algorithms and predict congestion patterns. Your data helps improve ETA predictions and suggest more efficient routes.',
-        amount: '950 DCG',
         trustScore: '94%',
-        dataPoints: '144',
         icon: require('../../assets/logo.png'),
-        dataCategories: ['Route Selection', 'Travel Times', 'Traffic Density', 'Stop Duration']
+        dataItems: [
+            { name: 'Route Selection', value: 250 },
+            { name: 'Travel Times', value: 200 },
+            { name: 'Traffic Density', value: 250 },
+            { name: 'Stop Duration', value: 250 }
+        ]
     }
 ];
 
-// Data category component
-const DataCategory = ({ title }: { title: string }) => (
-    <View className="bg-gray-800/50 rounded-full px-3 py-1 mr-2 mb-2">
-        <Text className="text-gray-300 text-xs font-gilroy-medium tracking-tight">
-            {title}
+// Checkbox item component
+const DataCheckboxItem = ({ item, isSelected, onToggle }: DataCheckboxItemProps) => (
+    <TouchableOpacity
+        className="flex-row items-center justify-between py-3 border-b border-white/10"
+        onPress={onToggle}
+    >
+        <View className="flex-row items-center">
+            {isSelected ? (
+                <CheckSquare size={22} color="#60A5FA" weight="fill" />
+            ) : (
+                <Square size={22} color="#9CA3AF" weight="regular" />
+            )}
+            <Text className="text-white text-base font-gilroy-medium tracking-tight ml-3">
+                {item.name}
+            </Text>
+        </View>
+        <Text className="text-green-100 text-base font-gilroy-medium tracking-tight">
+            {item.value} DCG
         </Text>
-    </View>
-);
-
-// Info row component
-const InfoRow = ({ label, value }: { label: string, value: string }) => (
-    <View className="flex-row justify-between py-3 border-b border-white/10">
-        <Text className="text-gray-400 text-sm font-gilroy-medium tracking-tight">{label}</Text>
-        <Text className="text-white text-sm font-gilroy-medium tracking-tight">{value}</Text>
-    </View>
+    </TouchableOpacity>
 );
 
 export default function BuyerDetailScreen() {
@@ -86,6 +130,27 @@ export default function BuyerDetailScreen() {
 
     // Find the buyer data based on the ID
     const buyer = buyerData.find(item => item.id === id);
+
+    // State for tracking selected data items
+    const [selectedItems, setSelectedItems] = useState<SelectedItems>({});
+
+    // Calculate total DCG based on selected items
+    const totalDCG = buyer ? buyer.dataItems
+        .filter((_, index) => selectedItems[index])
+        .reduce((sum, item) => sum + item.value, 0) : 0;
+
+    // Toggle selection for an item
+    const toggleItem = (index: number) => {
+        setSelectedItems(prev => ({
+            ...prev,
+            [index]: !prev[index]
+        }));
+    };
+
+    // Handle sell data action
+    const handleSellData = () => {
+        console.log(`Selling data for total of ${totalDCG} DCG`);
+    };
 
     if (!buyer) {
         return (
@@ -108,7 +173,7 @@ export default function BuyerDetailScreen() {
             <ScrollView className="flex-1 px-4 pt-4" showsVerticalScrollIndicator={false}>
                 {/* Buyer Header with centered layout */}
                 <View className="items-center mt-8 mb-6">
-                    <View className="w-20 h-20 bg-gray-700 rounded-full items-center justify-center mb-3">
+                    <View className="w-20 h-20 bg-white/10 rounded-full items-center justify-center mb-3">
                         <Image source={buyer.icon} className="w-12 h-12 opacity-60" resizeMode="contain" />
                     </View>
                     <Text className="text-white text-2xl font-gilroy-medium tracking-tight text-center">{buyer.name}</Text>
@@ -116,13 +181,6 @@ export default function BuyerDetailScreen() {
                         <ShieldCheck size={14} color="#9CA3AF" weight="bold" />
                         <Text className="text-gray-400 text-xs ml-1 font-gilroy-medium tracking-tight">Trust Score: {buyer.trustScore}</Text>
                     </View>
-                </View>
-
-                {/* Offer Amount with larger display */}
-                <View className="bg-gray-800/30 rounded-xl p-6 mb-5 items-center">
-                    <Text className="text-gray-300 text-sm font-gilroy-medium tracking-tight mb-2">Offering</Text>
-                    <Text className="text-green-400 text-5xl font-gilroy-medium tracking-tight">{buyer.amount}</Text>
-                    <Text className="text-gray-400 text-xs font-gilroy-medium tracking-tight mt-2">for your vehicle data</Text>
                 </View>
 
                 {/* Description */}
@@ -133,25 +191,26 @@ export default function BuyerDetailScreen() {
                     </Text>
                 </View>
 
-                {/* Data Categories in a grid */}
+                {/* Selectable Data Items */}
                 <View className="mb-6">
-                    <Text className="text-white text-lg font-gilroy-bold tracking-tight mb-3">Data Categories</Text>
-                    <View className="flex-row flex-wrap justify-center">
-                        {buyer.dataCategories.map((category, index) => (
-                            <DataCategory key={index} title={category} />
+                    <Text className="text-white text-lg font-gilroy-bold tracking-tight mb-3">Select Data to Sell</Text>
+                    <View className="bg-gray-800/20 rounded-xl p-4">
+                        {buyer.dataItems.map((item, index) => (
+                            <DataCheckboxItem
+                                key={index}
+                                item={item}
+                                isSelected={!!selectedItems[index]}
+                                onToggle={() => toggleItem(index)}
+                            />
                         ))}
                     </View>
                 </View>
 
-                {/* Additional Info */}
-                <View className="mb-8">
-                    <Text className="text-white text-lg font-gilroy-bold tracking-tight mb-3">Details</Text>
-                    <View className="bg-gray-800/20 rounded-xl p-4">
-                        <InfoRow label="Data Points Required" value={buyer.dataPoints} />
-                        <InfoRow label="Offer Valid Until" value="June 15, 2025" />
-                        <InfoRow label="Payment Method" value="DCG Tokens" />
-                        <InfoRow label="Estimated Delivery" value="Immediate" />
-                    </View>
+                {/* Total Amount Display */}
+                <View className="bg-gray-800/20 rounded-xl p-6 mb-5 items-center">
+                    <Text className="text-gray-300 text-sm font-gilroy-medium tracking-tight mb-2">Total Earnings</Text>
+                    <Text className="text-green-100 text-5xl font-gilroy-medium tracking-tight">{totalDCG} DCG</Text>
+                    <Text className="text-gray-400 text-xs font-gilroy-medium tracking-tight mt-2">for selected data</Text>
                 </View>
 
                 {/* Info Box */}
@@ -172,8 +231,14 @@ export default function BuyerDetailScreen() {
                 </View>
 
                 {/* Action Buttons */}
-                <TouchableOpacity className="bg-white py-4 rounded-lg items-center justify-center mb-3">
-                    <Text className="text-black text-base font-gilroy-bold tracking-tight">SELL DATA</Text>
+                <TouchableOpacity
+                    className={`py-4 rounded-lg items-center justify-center mb-3 ${totalDCG > 0 ? 'bg-white' : 'bg-white/40'}`}
+                    onPress={handleSellData}
+                    disabled={totalDCG === 0}
+                >
+                    <Text className={`text-base font-gilroy-bold tracking-tight ${totalDCG > 0 ? 'text-black' : 'text-gray-600'}`}>
+                        SELL DATA FOR {totalDCG} DCG
+                    </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
